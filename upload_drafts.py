@@ -4,6 +4,7 @@ from pathlib import Path
 from edapi import EdAPI
 
 COURSE_ID = 67447
+NOTES_DIR = os.path.expanduser("~/src/cse160/lecture_notes")
 
 
 def find_files(path, pattern=r".*"):
@@ -26,20 +27,22 @@ def post_draft(ed, contents_file):
     path = Path(contents_file)
     title = path.parent.name
 
-    thread = {"thread_draft": {
-        "course_id": COURSE_ID,
-        "type": "post",
-        "title": title,
-        "content": contents,
-        "category": "General",
-        "subcategory": "",
-        "subsubcategory": "",
-        "is_pinned": False,
-        "is_private": False,
-        "is_anonymous": False,
-        "is_megathread": False,
-        "anonymous_comments": False,
-    }}
+    thread = {
+        "thread_draft": {
+            "course_id": COURSE_ID,
+            "type": "post",
+            "title": title,
+            "content": contents,
+            "category": "General",
+            "subcategory": "",
+            "subsubcategory": "",
+            "is_pinned": False,
+            "is_private": False,
+            "is_anonymous": False,
+            "is_megathread": False,
+            "anonymous_comments": False,
+        }
+    }
 
     try:
         t = ed.post_draft(COURSE_ID, thread)
@@ -52,7 +55,7 @@ def main():
     ed = EdAPI()
     ed.login()
 
-    notes_raw = find_files("./notes/", r'.*\.html')
+    notes_raw = find_files(NOTES_DIR, r'.*\.html')
 
     for file in notes_raw:
         id = post_draft(ed, file)

@@ -5,10 +5,7 @@ from edapi import EdAPI
 from ed_markdown_converter import EdTagsConverter
 
 
-# Constants
-NOTES_PATH = "./notes"
-DATE_FORMAT = "%Y-%m-%d"
-
+NOTES_DIR = os.path.expanduser("~/src/cse160/lecture_notes")
 COURSE_ID = 56780
 
 
@@ -39,7 +36,7 @@ def main():
 
     for post in notes:
         title = post["title"]
-        path = os.path.join(NOTES_PATH, f"{title}")
+        path = os.path.join(NOTES_DIR, f"{title}")
         os.makedirs(path, exist_ok=True)
 
         # raw HTML

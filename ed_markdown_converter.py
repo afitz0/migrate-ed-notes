@@ -5,7 +5,6 @@ import shutil
 
 from bs4 import BeautifulSoup as bs
 from markdownify import MarkdownConverter
-from markdownify import MarkdownConverter
 from urllib.parse import unquote
 
 
@@ -38,11 +37,11 @@ class EdTagsConverter(MarkdownConverter):
         embed = self.options.get('embed_images', False)
 
         if download or embed:
-            filename, img_raw = self.download_image(el)
+            r = self.download_image(el)
 
         if embed:
             mime_type = r.headers['Content-Type']
-            content = base64.b64encode(img_raw.read())
+            content = base64.b64encode(r.raw.read())
 
             f = '![{}](data:{};base64,{})'
 
@@ -54,11 +53,19 @@ class EdTagsConverter(MarkdownConverter):
             return image + '\n\n'
 
         if download:
+            filename = r.headers['content-disposition'] \
+                .split(';')[1] \
+                .split('=')[1]
+            filename = filename.replace('"', '')
+            filename = unquote(filename)
+            filename = filename.replace(' ', '_')
+            filename = filename.replace(' ', '_')
+
             root_images_path = self.options.get('image_path', None)
             if root_images_path and os.path.isdir(root_images_path or ''):
                 filepath = os.path.join(root_images_path, filename)
                 with open(filepath, 'wb') as f:
-                    shutil.copyfileobj(img_raw, f)
+                    shutil.copyfileobj(r.raw, f)
 
             el.attrs['src'] = filepath  # replace src with local path
 
@@ -77,15 +84,7 @@ class EdTagsConverter(MarkdownConverter):
         # download image and save to file or embed as base64
         r = requests.get(src, stream=True)
         if r.status_code == 200:
-            filename = r.headers['content-disposition'] \
-                .split(';')[1] \
-                .split('=')[1]
-            filename = filename.replace('"', '')
-            filename = unquote(filename)
-            filename = filename.replace(' ', '_')
-            filename = filename.replace(' ', '_')
-
             r.raw.decode_content = True
-            return filename, r.raw
+            return r
 
         raise Exception(f'Failed to download image: {src}')
