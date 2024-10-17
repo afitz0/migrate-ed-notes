@@ -26,6 +26,8 @@ an environment variable called `ED_API_TOKEN`.
 
 ## Synopsis
 
+The primary requirement is the EdAPI library, which is available on PyPI, but is incomplete. This repo uses [a fork of the EdAPI library](https://github.com/afitz0/edapi) with some additional functionality.
+
 Running `get_notes.py` with no other changes will create `NOTES_DIR` if necessary, and populate it with one subdir per post. Posts are filtered as type announcement, under category Lecture, subcategory Notes. Content is saved as both the "html" file and a conversion to markdown.
 
 Running `upload_drafts.py` will upload all the notes in `NOTES_DIR` to Ed as drafts. It searches for all html files, and uses the parent directory names as the post title. For example, given:
