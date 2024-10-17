@@ -1,3 +1,5 @@
 notes
 .ed_api_token
 .env
+.venv
+__pycache__
