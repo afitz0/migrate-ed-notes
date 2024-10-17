@@ -3,10 +3,7 @@ import pandas as pd
 
 from edapi import EdAPI
 from ed_markdown_converter import EdTagsConverter
-
-
-NOTES_DIR = os.path.expanduser("~/src/cse160/lecture_notes")
-COURSE_ID = 56780
+from constants import NOTES_DIR, OLD_COURSE_ID as COURSE_ID
 
 
 # Create shorthand method for conversion

@@ -2,9 +2,7 @@ import re
 import os
 from pathlib import Path
 from edapi import EdAPI
-
-COURSE_ID = 67447
-NOTES_DIR = os.path.expanduser("~/src/cse160/lecture_notes")
+from constants import NOTES_DIR, NEW_COURSE_ID as COURSE_ID
 
 
 def find_files(path, pattern=r".*"):
